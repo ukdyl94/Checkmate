@@ -210,7 +210,7 @@ const CreateInfrastructureMonitor = () => {
 							/>
 						)}
 					</Box>
-					{!isCreate && (
+					{!isCreate && monitor && (
 						<MonitorActionButtons
 							monitor={monitor}
 							isBusy={isBusy}
