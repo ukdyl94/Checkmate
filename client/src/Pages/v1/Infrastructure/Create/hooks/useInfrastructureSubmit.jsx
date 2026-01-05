@@ -54,6 +54,7 @@ const useInfrastructureSubmit = () => {
 			temperature,
 			usage_temperature,
 			selectedDisks,
+			dockerNotifications,
 			...rest
 		} = form;
 
@@ -70,7 +71,7 @@ const useInfrastructureSubmit = () => {
 			description: form.name,
 			type: "hardware",
 			notifications: infrastructureMonitor.notifications,
-			dockerNotifications: form.dockerNotifications,
+			dockerNotifications,
 			selectedDisks,
 			thresholds,
 		};
