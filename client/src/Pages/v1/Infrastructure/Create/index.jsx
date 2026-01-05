@@ -203,7 +203,7 @@ const CreateInfrastructureMonitor = () => {
 								<></>
 							)}
 						</Typography>
-						{!isCreate && (
+						{!isCreate && monitor && (
 							<MonitorStatusHeader
 								monitor={monitor}
 								infrastructureMonitor={infrastructureMonitor}
