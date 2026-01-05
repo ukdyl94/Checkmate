@@ -70,9 +70,11 @@ const useInfrastructureSubmit = () => {
 			description: form.name,
 			type: "hardware",
 			notifications: infrastructureMonitor.notifications,
+			dockerNotifications: form.dockerNotifications,
 			selectedDisks,
 			thresholds,
 		};
+		console.log("Final form being submitted:", finalForm);
 		// Handle create or update
 		isCreate
 			? await createMonitor({ monitor: finalForm, redirect: "/infrastructure" })
