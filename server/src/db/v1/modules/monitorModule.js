@@ -535,9 +535,11 @@ class MonitorModule {
 
 	editMonitor = async ({ monitorId, body }) => {
 		try {
+			console.log("editMonitor - body.dockerNotifications:", body.dockerNotifications);
 			const editedMonitor = await this.Monitor.findByIdAndUpdate(monitorId, body, {
 				new: true,
 			});
+			console.log("editMonitor - editedMonitor.dockerNotifications:", editedMonitor.dockerNotifications);
 			return editedMonitor;
 		} catch (error) {
 			error.service = SERVICE_NAME;
