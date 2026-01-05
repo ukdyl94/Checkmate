@@ -303,6 +303,7 @@ class MonitorModule {
 	getHardwareDetailsById = async ({ monitorId, dateRange }) => {
 		try {
 			const monitor = await this.Monitor.findById(monitorId);
+			console.log("getHardwareDetailsById - monitor.dockerNotifications:", monitor.dockerNotifications);
 			const dates = this.getDateRange(dateRange);
 
 			const formatLookup = {
@@ -317,10 +318,12 @@ class MonitorModule {
 
 			const stats = hardwareStats[0];
 
-			return {
+			const result = {
 				...monitor.toObject(),
 				stats,
 			};
+			console.log("getHardwareDetailsById - result.dockerNotifications:", result.dockerNotifications);
+			return result;
 		} catch (error) {
 			error.service = SERVICE_NAME;
 			error.method = "getHardwareDetailsById";
@@ -535,9 +538,11 @@ class MonitorModule {
 
 	editMonitor = async ({ monitorId, body }) => {
 		try {
+			console.log("editMonitor - body.dockerNotifications:", body.dockerNotifications);
 			const editedMonitor = await this.Monitor.findByIdAndUpdate(monitorId, body, {
 				new: true,
 			});
+			console.log("editMonitor - editedMonitor.dockerNotifications:", editedMonitor.dockerNotifications);
 			return editedMonitor;
 		} catch (error) {
 			error.service = SERVICE_NAME;

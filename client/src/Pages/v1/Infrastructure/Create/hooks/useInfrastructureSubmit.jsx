@@ -74,7 +74,6 @@ const useInfrastructureSubmit = () => {
 			selectedDisks,
 			thresholds,
 		};
-		console.log("Final form being submitted:", finalForm);
 		// Handle create or update
 		isCreate
 			? await createMonitor({ monitor: finalForm, redirect: "/infrastructure" })
