@@ -75,9 +75,6 @@ const useInfrastructureSubmit = () => {
 			selectedDisks,
 			thresholds,
 		};
-		console.log("Frontend finalForm.dockerNotifications:", finalForm.dockerNotifications);
-		console.log("Frontend form.dockerNotifications:", form.dockerNotifications);
-		console.log("Frontend infrastructureMonitor.dockerNotifications:", infrastructureMonitor.dockerNotifications);
 		// Handle create or update
 		isCreate
 			? await createMonitor({ monitor: finalForm, redirect: "/infrastructure" })
