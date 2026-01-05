@@ -388,6 +388,7 @@ const useUpdateMonitor = () => {
 					thresholds: monitor.thresholds,
 					secret: monitor.secret,
 					selectedDisks: monitor.selectedDisks,
+			dockerNotifications: monitor.dockerNotifications,
 				}),
 			};
 			await networkService.updateMonitor({

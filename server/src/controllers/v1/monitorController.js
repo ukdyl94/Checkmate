@@ -300,9 +300,7 @@ class MonitorController extends BaseController {
 	editMonitor = this.asyncHandler(
 		async (req, res) => {
 			await getMonitorByIdParamValidation.validateAsync(req.params);
-			console.log("editMonitor controller - req.body.dockerNotifications BEFORE validation:", req.body.dockerNotifications);
 			await editMonitorBodyValidation.validateAsync(req.body);
-			console.log("editMonitor controller - req.body.dockerNotifications AFTER validation:", req.body.dockerNotifications);
 			const monitorId = req?.params?.monitorId;
 
 			const teamId = req?.user?.teamId;
