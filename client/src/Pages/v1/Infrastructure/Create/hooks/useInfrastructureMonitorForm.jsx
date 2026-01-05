@@ -16,6 +16,7 @@ const useInfrastructureMonitorForm = () => {
 		usage_disk: "",
 		temperature: false,
 		usage_temperature: "",
+		dockerNotifications: false,
 		secret: "",
 		selectedDisks: [],
 	});
@@ -82,6 +83,7 @@ const useInfrastructureMonitorForm = () => {
 				thresholds.usage_temperature !== undefined
 					? (thresholds.usage_temperature * 100).toString()
 					: "",
+			dockerNotifications: monitor.dockerNotifications || false,
 			secret: monitor.secret || "",
 			selectedDisks: monitor.selectedDisks || [],
 		}));

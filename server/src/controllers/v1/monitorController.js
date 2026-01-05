@@ -145,6 +145,31 @@ class MonitorController extends BaseController {
 		"getHardwareDetailsById"
 	);
 
+	getDockerDataById = this.asyncHandler(
+		async (req, res) => {
+			const monitorId = req?.params?.monitorId;
+			const limit = req?.query?.limit || 1;
+			const teamId = req?.user?.teamId;
+
+			if (!teamId) {
+				throw this.errorService.createBadRequestError("Team ID is required");
+			}
+
+			const dockerData = await this.monitorService.getDockerDataById({
+				teamId,
+				monitorId,
+				limit,
+			});
+
+			return res.success({
+				msg: "Docker data retrieved successfully",
+				data: dockerData,
+			});
+		},
+		SERVICE_NAME,
+		"getDockerDataById"
+	);
+
 	getMonitorCertificate = this.asyncHandler(
 		async (req, res) => {
 			await getCertificateParamValidation.validateAsync(req.params);

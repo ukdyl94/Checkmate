@@ -25,6 +25,7 @@ class MonitorRoutes {
 
 		// Hardware routes
 		this.router.get("/hardware/details/:monitorId", this.monitorController.getHardwareDetailsById);
+		this.router.get("/hardware/docker/:monitorId", this.monitorController.getDockerDataById);
 
 		// General monitor routes
 		this.router.post("/pause/:monitorId", isAllowed(["admin", "superadmin"]), this.monitorController.pauseMonitor);

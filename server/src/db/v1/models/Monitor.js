@@ -129,6 +129,15 @@ const MonitorSchema = mongoose.Schema(
 			type: [String],
 			default: [],
 		},
+		dockerNotifications: {
+			type: Boolean,
+			default: false,
+		},
+		dockerContainerStates: {
+			type: Map,
+			of: String,
+			default: () => new Map(),
+		},
 		gameId: {
 			type: String,
 		},

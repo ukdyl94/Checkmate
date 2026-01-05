@@ -64,6 +64,13 @@ class MonitorService {
 		return monitor;
 	};
 
+	getDockerDataById = async ({ teamId, monitorId, limit }) => {
+		await this.verifyTeamAccess({ teamId, monitorId });
+		const dockerData = await this.db.monitorModule.getDockerDataById({ monitorId, limit });
+
+		return dockerData;
+	};
+
 	getMonitorById = async ({ teamId, monitorId }) => {
 		await this.verifyTeamAccess({ teamId, monitorId });
 		const monitor = await this.db.monitorModule.getMonitorById(monitorId);

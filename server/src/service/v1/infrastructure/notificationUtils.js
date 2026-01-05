@@ -200,6 +200,96 @@ class NotificationUtils {
 		const body = { text: content, name: monitor.name, url: monitor.url };
 		return body;
 	};
+
+	buildDockerAlerts = async (networkResponse) => {
+		const monitor = networkResponse?.monitor;
+		const dockerData = networkResponse?.payload?.docker?.data || [];
+
+		if (!monitor.dockerNotifications || dockerData.length === 0) {
+			return [[], null];
+		}
+
+		const { clientHost } = this.settingsService.getSettings();
+		const alertsToSend = [];
+		const discordEmbeds = [];
+
+		const monitorInfoFields = [
+			{ name: "Monitor", value: monitor.name, inline: true },
+			{ name: "URL", value: monitor.url, inline: false },
+		];
+		const goToIncidentField = { name: `Go to incident`, value: `${clientHost}/infrastructure/${monitor._id}` };
+
+		// Track status changes for each container
+		for (const container of dockerData) {
+			const containerId = container.container_id;
+			const containerName = container.container_name || containerId?.substring(0, 12);
+			const currentStatus = container.status;
+			const isRunning = container.running;
+
+			// Get previous state
+			const previousState = monitor.dockerContainerStates.get(containerId);
+
+			// Update current state
+			monitor.dockerContainerStates.set(containerId, currentStatus);
+
+			// Check for status changes
+			if (previousState && previousState !== currentStatus) {
+				const statusChangeMessage = `Container "${containerName}" changed from ${previousState} to ${currentStatus}`;
+
+				alertsToSend.push(statusChangeMessage);
+
+				// Determine color based on status
+				const color = isRunning ? 3066993 : 15548997; // Green for running, red for stopped
+
+				discordEmbeds.push({
+					title: "Docker Container Status Change",
+					description: statusChangeMessage,
+					color: color,
+					fields: [
+						...monitorInfoFields,
+						{ name: "Container", value: containerName, inline: true },
+						{ name: "Image", value: container.base_image || "Unknown", inline: true },
+						{ name: "Previous Status", value: previousState, inline: true },
+						{ name: "Current Status", value: currentStatus, inline: true },
+						{ name: "Health", value: container.health?.healthy ? "Healthy" : "Unhealthy", inline: true },
+						goToIncidentField,
+					],
+					footer: { text: "Checkmate" },
+					timestamp: new Date().toISOString(),
+				});
+			} else if (!previousState) {
+				// First time seeing this container
+				monitor.dockerContainerStates.set(containerId, currentStatus);
+			}
+		}
+
+		await monitor.save();
+		const discordPayload = discordEmbeds.length ? { embeds: discordEmbeds } : null;
+		return [alertsToSend, discordPayload];
+	};
+
+	buildDockerEmail = async (networkResponse, alerts) => {
+		const { monitor } = networkResponse;
+		const subject = `Monitor ${monitor.name} - Docker container status changes`;
+		const context = { monitor: monitor.name, url: monitor.url, alerts };
+		const template = "hardwareIncidentTemplate"; // Reuse hardware template for now
+		const html = await this.emailService.buildEmail(template, context);
+		return { subject, html };
+	};
+
+	buildDockerNotificationMessage = (alerts, monitor) => {
+		const { clientHost } = this.settingsService.getSettings();
+		const alertsHeader = [`Monitor: ${monitor.name}`, `URL: ${monitor.url}`, `Docker Container Status Changes:`];
+		const alertFooter = [`Go to incident: ${clientHost}/infrastructure/${monitor._id}`];
+		const alertText = alerts.length > 0 ? [...alertsHeader, ...alerts, ...alertFooter] : [];
+		return alertText.map((alert) => alert).join("\n");
+	};
+
+	buildDockerWebhookBody = (alerts, monitor) => {
+		const content = alerts.map((alert) => alert).join("\n");
+		const body = { text: content, name: monitor.name, url: monitor.url };
+		return body;
+	};
 }
 
 export default NotificationUtils;

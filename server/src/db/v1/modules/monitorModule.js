@@ -328,6 +328,25 @@ class MonitorModule {
 		}
 	};
 
+	getDockerDataById = async ({ monitorId, limit = 1 }) => {
+		try {
+			const checks = await this.Check.find({
+				monitorId: new this.ObjectId(monitorId),
+				"docker.data": { $exists: true, $ne: [] },
+			})
+				.sort({ createdAt: -1 })
+				.limit(parseInt(limit))
+				.select("createdAt docker")
+				.lean();
+
+			return checks;
+		} catch (error) {
+			error.service = SERVICE_NAME;
+			error.method = "getDockerDataById";
+			throw error;
+		}
+	};
+
 	getMonitorsByTeamId = async ({ limit, type, page, rowsPerPage, filter, field, order, teamId }) => {
 		limit = parseInt(limit);
 		page = parseInt(page);

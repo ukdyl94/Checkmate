@@ -56,6 +56,33 @@ const networkInterfaceSchema = mongoose.Schema({
 	fifo_out: { type: Number, default: 0 },
 });
 
+const dockerExposedPortSchema = mongoose.Schema({
+	port: { type: String },
+	protocol: { type: String },
+});
+
+const dockerHealthSchema = mongoose.Schema({
+	healthy: { type: Boolean },
+	source: { type: String },
+	message: { type: String },
+});
+
+const dockerContainerSchema = mongoose.Schema({
+	container_id: { type: String },
+	container_name: { type: String },
+	status: { type: String },
+	health: { type: dockerHealthSchema, default: () => ({}) },
+	running: { type: Boolean },
+	base_image: { type: String },
+	exposed_ports: { type: [dockerExposedPortSchema], default: () => [] },
+	started_at: { type: Number },
+	finished_at: { type: Number },
+});
+
+const dockerSchema = mongoose.Schema({
+	data: { type: [dockerContainerSchema], default: () => [] },
+});
+
 const CheckSchema = new mongoose.Schema(
 	{
 		// Common fields
@@ -148,6 +175,11 @@ const CheckSchema = new mongoose.Schema(
 		net: {
 			type: [networkInterfaceSchema],
 			default: () => [],
+		},
+
+		docker: {
+			type: dockerSchema,
+			default: () => ({}),
 		},
 
 		// PageSpeed fields

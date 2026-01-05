@@ -278,7 +278,57 @@ class NetworkService {
 
 	async requestHardware(monitor) {
 		try {
-			return await this.requestHttp(monitor);
+			// Fetch hardware metrics
+			const hardwareResponse = await this.requestHttp(monitor);
+
+			// Try to fetch Docker data from Capture agent
+			let dockerData = null;
+			try {
+				const baseUrl = monitor.url.replace(/\/api\/v1\/metrics\/?$/, "");
+				const dockerUrl = `${baseUrl}/api/v1/metrics/docker`;
+				const config = {
+					headers: monitor.secret ? { Authorization: `Bearer ${monitor.secret}` } : undefined,
+				};
+
+				if (monitor.ignoreTlsErrors) {
+					config.agent = {
+						https: new this.https.Agent({
+							rejectUnauthorized: false,
+						}),
+					};
+				}
+
+				const dockerResponse = await this.got(dockerUrl, config);
+				const contentType = dockerResponse.headers["content-type"];
+
+				if (contentType && contentType.includes("application/json")) {
+					try {
+						dockerData = JSON.parse(dockerResponse.body);
+					} catch (parseError) {
+						this.logger.warn({
+							message: "Failed to parse Docker data JSON",
+							service: this.SERVICE_NAME,
+							method: "requestHardware",
+							error: parseError.message,
+						});
+					}
+				}
+			} catch (dockerError) {
+				// Docker data might not be available - that's okay, log and continue
+				this.logger.info({
+					message: "Docker data not available from Capture agent",
+					service: this.SERVICE_NAME,
+					method: "requestHardware",
+					details: { error: dockerError.message },
+				});
+			}
+
+			// Add Docker data to the response payload if available
+			if (dockerData && hardwareResponse.payload) {
+				hardwareResponse.payload.docker = dockerData;
+			}
+
+			return hardwareResponse;
 		} catch (err) {
 			err.service = this.SERVICE_NAME;
 			err.method = "requestHardware";

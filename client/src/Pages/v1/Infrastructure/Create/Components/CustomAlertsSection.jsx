@@ -1,5 +1,5 @@
 import ConfigBox from "@/Components/v1/ConfigBox/index.jsx";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, FormControlLabel, Checkbox } from "@mui/material";
 import { CustomThreshold } from "./CustomThreshold/index.jsx";
 import { capitalizeFirstLetter } from "../../../../../Utils/stringUtils.js";
 import { useTheme } from "@emotion/react";
@@ -72,6 +72,28 @@ const CustomAlertsSection = ({
 						{getAlertError(errors)}
 					</Typography>
 				)}
+				<Box mt={theme.spacing(4)}>
+					<FormControlLabel
+						control={
+							<Checkbox
+								checked={infrastructureMonitor.dockerNotifications || false}
+								onChange={handleCheckboxChange}
+								name="dockerNotifications"
+							/>
+						}
+						label={
+							<Box>
+								<Typography variant="body1">{t("v1.infrastructure.dockerNotificationsLabel")}</Typography>
+								<Typography
+									variant="caption"
+									color="text.secondary"
+								>
+									{t("v1.infrastructure.dockerNotificationsDescription")}
+								</Typography>
+							</Box>
+						}
+					/>
+				</Box>
 			</Stack>
 		</ConfigBox>
 	);

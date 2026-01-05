@@ -67,6 +67,19 @@ class NotificationService {
 		const notificationIDs = networkResponse.monitor?.notifications ?? [];
 		if (notificationIDs.length === 0) return false;
 		if (networkResponse.monitor.type === "hardware") {
+			// Check for Docker alerts
+			const dockerData = networkResponse?.payload?.docker?.data;
+			if (dockerData && monitor.dockerNotifications) {
+				const [dockerAlerts, dockerDiscordContent] = await this.notificationUtils.buildDockerAlerts(networkResponse);
+				if (dockerAlerts.length > 0) {
+					const { subject, html } = await this.notificationUtils.buildDockerEmail(networkResponse, dockerAlerts);
+					const content = await this.notificationUtils.buildDockerNotificationMessage(dockerAlerts, monitor);
+					const webhookBody = await this.notificationUtils.buildDockerWebhookBody(dockerAlerts, monitor);
+					await this.notifyAll({ notificationIDs, subject, html, content, discordContent: dockerDiscordContent, webhookBody });
+				}
+			}
+
+			// Check for hardware threshold alerts
 			const thresholds = networkResponse?.monitor?.thresholds;
 
 			if (thresholds === undefined) return false; // No thresholds set, we're done
