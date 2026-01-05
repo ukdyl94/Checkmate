@@ -1161,7 +1161,11 @@
 			"started": "Started",
 			"noPorts": "No ports",
 			"dockerNotificationsLabel": "Docker Container Status Notifications",
-			"dockerNotificationsDescription": "Get notified when Docker container status changes (e.g., running to stopped)"
+			"dockerNotificationsDescription": "Get notified when Docker container status changes (e.g., running to stopped)",
+			"unknown": "Unknown",
+			"healthy": "Healthy",
+			"unhealthy": "Unhealthy",
+			"notAvailable": "N/A"
 		}
 	},
 	"incidentsPage": {

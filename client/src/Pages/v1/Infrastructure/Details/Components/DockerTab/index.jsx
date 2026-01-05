@@ -38,7 +38,7 @@ const DockerTab = ({ monitorId }) => {
 	};
 
 	const formatTimestamp = (timestamp) => {
-		if (!timestamp) return "N/A";
+		if (!timestamp) return t("v1.infrastructure.notAvailable");
 		return new Date(timestamp * 1000).toLocaleString();
 	};
 
@@ -181,7 +181,7 @@ const DockerTab = ({ monitorId }) => {
 										fontWeight="medium"
 										sx={{ color: theme.palette.primary.contrastText }}
 									>
-										{container.container_name || "Unknown"}
+										{container.container_name || t("v1.infrastructure.unknown")}
 									</Typography>
 									<Typography
 										variant="caption"
@@ -227,7 +227,11 @@ const DockerTab = ({ monitorId }) => {
 								>
 									{container.health ? (
 										<Chip
-											label={container.health.healthy ? "Healthy" : "Unhealthy"}
+											label={
+												container.health.healthy
+													? t("v1.infrastructure.healthy")
+													: t("v1.infrastructure.unhealthy")
+											}
 											color={container.health.healthy ? "success" : "error"}
 											size="small"
 										/>
@@ -236,7 +240,7 @@ const DockerTab = ({ monitorId }) => {
 											variant="caption"
 											sx={{ color: theme.palette.primary.contrastTextTertiary }}
 										>
-											N/A
+											{t("v1.infrastructure.notAvailable")}
 										</Typography>
 									)}
 								</TableCell>
