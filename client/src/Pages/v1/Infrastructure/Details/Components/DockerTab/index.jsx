@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useTranslation } from "react-i18next";
-import { networkService } from "@/Utils/NetworkService.js";
+import { networkService } from "../../../../../../main.jsx";
 
 const DockerTab = ({ monitorId }) => {
 	const [dockerData, setDockerData] = useState(null);

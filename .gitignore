@@ -1,3 +1,6 @@
 .idea
 .vscode
 .VSCodeCounter
+
+# Implementation documentation (local only)
+DOCKER_MONITORING_IMPLEMENTATION.md
