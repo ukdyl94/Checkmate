@@ -389,6 +389,7 @@ class StatusService {
 			check.errors = errors ?? [];
 			check.capture = payload?.capture ?? {};
 			check.net = net ?? {};
+			check.docker = payload?.docker ?? {};
 		}
 		return check;
 	};
