@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useTranslation } from "react-i18next";
-import axiosInstance from "@/Utils/v1/axiosInstance.js";
+import { networkService } from "@/Utils/NetworkService.js";
 
 const DockerTab = ({ monitorId }) => {
 	const [dockerData, setDockerData] = useState(null);
@@ -34,7 +34,9 @@ const DockerTab = ({ monitorId }) => {
 
 	const fetchDockerData = async () => {
 		try {
-			const response = await axiosInstance.get(`/monitors/hardware/docker/${monitorId}`);
+			const response = await networkService.get({
+				endpoint: `/monitors/hardware/docker/${monitorId}`,
+			});
 			if (response.data.success && response.data.data.length > 0) {
 				setDockerData(response.data.data[0].docker);
 			} else {
