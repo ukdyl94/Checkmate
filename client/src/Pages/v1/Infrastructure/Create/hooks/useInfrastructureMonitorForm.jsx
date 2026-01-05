@@ -57,6 +57,7 @@ const useInfrastructureMonitorForm = () => {
 	const initializeInfrastructureMonitorForUpdate = useCallback((monitor) => {
 		const MS_PER_MINUTE = 60000;
 		const { thresholds = {} } = monitor;
+		console.log("initializeInfrastructureMonitorForUpdate - monitor.dockerNotifications:", monitor.dockerNotifications);
 		setInfrastructureMonitor((prev) => ({
 			...prev,
 			url: monitor.url.replace(/^https?:\/\//, ""),
