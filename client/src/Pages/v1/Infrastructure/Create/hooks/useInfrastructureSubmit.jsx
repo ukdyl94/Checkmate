@@ -32,6 +32,7 @@ const useInfrastructureSubmit = () => {
 			...(infrastructureMonitor.temperature
 				? { usage_temperature: infrastructureMonitor.usage_temperature }
 				: {}),
+			dockerNotifications: infrastructureMonitor.dockerNotifications || false,
 			secret: infrastructureMonitor.secret,
 			selectedDisks: infrastructureMonitor.selectedDisks,
 		};
