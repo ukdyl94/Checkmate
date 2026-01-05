@@ -83,9 +83,11 @@ const CustomAlertsSection = ({
 					/>
 					<Typography
 						variant="caption"
-						color="text.secondary"
-						mt={theme.spacing(1)}
-						display="block"
+						sx={{
+							color: theme.palette.primary.contrastTextSecondary,
+							mt: theme.spacing(1),
+							display: "block",
+						}}
 					>
 						{t("v1.infrastructure.dockerNotificationsDescription")}
 					</Typography>

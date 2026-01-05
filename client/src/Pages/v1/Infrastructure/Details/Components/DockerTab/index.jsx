@@ -56,17 +56,24 @@ const DockerTab = ({ monitorId }) => {
 
 	if (!dockerData || !dockerData.data || dockerData.data.length === 0) {
 		return (
-			<Box p={4}>
+			<Box
+				p={4}
+				sx={{
+					backgroundColor: theme.palette.primary.main,
+					borderRadius: 2,
+					border: 1,
+					borderColor: theme.palette.primary.lowContrast,
+				}}
+			>
 				<Typography
 					variant="body1"
-					color="text.secondary"
+					sx={{ color: theme.palette.primary.contrastText }}
 				>
 					{t("v1.infrastructure.noDockerContainers")}
 				</Typography>
 				<Typography
 					variant="body2"
-					color="text.secondary"
-					mt={1}
+					sx={{ color: theme.palette.primary.contrastTextSecondary, mt: 1 }}
 				>
 					{t("v1.infrastructure.dockerSocketHelp")}
 				</Typography>
