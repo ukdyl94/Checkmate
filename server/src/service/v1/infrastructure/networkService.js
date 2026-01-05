@@ -285,7 +285,7 @@ class NetworkService {
 			let dockerData = null;
 			try {
 				const baseUrl = monitor.url.replace(/\/api\/v1\/metrics\/?$/, "");
-				const dockerUrl = `${baseUrl}/api/v1/metrics/docker`;
+				const dockerUrl = `${baseUrl}/api/v1/metrics/docker?all=true`;
 				const config = {
 					headers: monitor.secret ? { Authorization: `Bearer ${monitor.secret}` } : undefined,
 				};
