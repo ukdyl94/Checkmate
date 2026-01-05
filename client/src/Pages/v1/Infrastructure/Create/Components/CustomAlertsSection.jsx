@@ -1,5 +1,6 @@
 import ConfigBox from "@/Components/v1/ConfigBox/index.jsx";
-import { Box, Stack, Typography, FormControlLabel, Checkbox } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import Checkbox from "@/Components/v1/Inputs/Checkbox/index.jsx";
 import { CustomThreshold } from "./CustomThreshold/index.jsx";
 import { capitalizeFirstLetter } from "../../../../../Utils/stringUtils.js";
 import { useTheme } from "@emotion/react";
@@ -73,26 +74,21 @@ const CustomAlertsSection = ({
 					</Typography>
 				)}
 				<Box mt={theme.spacing(4)}>
-					<FormControlLabel
-						control={
-							<Checkbox
-								checked={infrastructureMonitor.dockerNotifications || false}
-								onChange={handleCheckboxChange}
-								name="dockerNotifications"
-							/>
-						}
-						label={
-							<Box>
-								<Typography variant="body1">{t("v1.infrastructure.dockerNotificationsLabel")}</Typography>
-								<Typography
-									variant="caption"
-									color="text.secondary"
-								>
-									{t("v1.infrastructure.dockerNotificationsDescription")}
-								</Typography>
-							</Box>
-						}
+					<Checkbox
+						id="dockerNotifications"
+						name="dockerNotifications"
+						label={t("v1.infrastructure.dockerNotificationsLabel")}
+						isChecked={infrastructureMonitor.dockerNotifications || false}
+						onChange={handleCheckboxChange}
 					/>
+					<Typography
+						variant="caption"
+						color="text.secondary"
+						mt={theme.spacing(1)}
+						display="block"
+					>
+						{t("v1.infrastructure.dockerNotificationsDescription")}
+					</Typography>
 				</Box>
 			</Stack>
 		</ConfigBox>
