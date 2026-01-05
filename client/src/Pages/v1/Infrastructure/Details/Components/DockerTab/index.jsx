@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 import {
 	Box,
-	Card,
-	CardContent,
 	Typography,
 	Table,
 	TableBody,
@@ -12,11 +10,13 @@ import {
 	TableRow,
 	Chip,
 	CircularProgress,
-	Stack,
+	Paper,
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import useDockerData from "../../../../../../Hooks/v1/useDockerData.js";
+import StatusBoxes from "@/Components/v1/StatusBoxes/index.jsx";
+import StatBox from "@/Components/v1/StatBox/index.jsx";
 
 const DockerTab = ({ monitorId }) => {
 	const theme = useTheme();
@@ -79,105 +79,132 @@ const DockerTab = ({ monitorId }) => {
 	const stoppedContainers = containers.length - runningContainers;
 
 	return (
-		<Stack gap={theme.spacing(4)}>
+		<>
 			{/* Summary Cards */}
-			<Box
-				display="flex"
-				gap={theme.spacing(4)}
-			>
-				<Card sx={{ flex: 1 }}>
-					<CardContent>
-						<Typography
-							variant="h6"
-							color={theme.palette.text.primary}
-						>
-							{containers.length}
-						</Typography>
-						<Typography
-							variant="body2"
-							color="text.secondary"
-						>
-							{t("v1.infrastructure.totalContainers")}
-						</Typography>
-					</CardContent>
-				</Card>
-
-				<Card sx={{ flex: 1 }}>
-					<CardContent>
-						<Typography
-							variant="h6"
-							color="success.main"
-						>
-							{runningContainers}
-						</Typography>
-						<Typography
-							variant="body2"
-							color="text.secondary"
-						>
-							{t("v1.infrastructure.runningContainers")}
-						</Typography>
-					</CardContent>
-				</Card>
-
-				<Card sx={{ flex: 1 }}>
-					<CardContent>
-						<Typography
-							variant="h6"
-							color="error.main"
-						>
-							{stoppedContainers}
-						</Typography>
-						<Typography
-							variant="body2"
-							color="text.secondary"
-						>
-							{t("v1.infrastructure.stoppedContainers")}
-						</Typography>
-					</CardContent>
-				</Card>
-			</Box>
+			<StatusBoxes shouldRender={true}>
+				<StatBox
+					heading={t("v1.infrastructure.totalContainers")}
+					subHeading={containers.length.toString()}
+				/>
+				<StatBox
+					heading={t("v1.infrastructure.runningContainers")}
+					subHeading={runningContainers.toString()}
+				/>
+				<StatBox
+					heading={t("v1.infrastructure.stoppedContainers")}
+					subHeading={stoppedContainers.toString()}
+				/>
+			</StatusBoxes>
 
 			{/* Containers Table */}
-			<TableContainer component={Card}>
+			<TableContainer
+				component={Paper}
+				sx={{
+					background: `linear-gradient(340deg, ${theme.palette.tertiary.main} 10%, ${theme.palette.primary.main} 45%)`,
+					borderRadius: 4,
+					border: 1,
+					borderColor: theme.palette.primary.lowContrast,
+					marginTop: theme.spacing(8),
+				}}
+			>
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>{t("v1.infrastructure.containerName")}</TableCell>
-							<TableCell>{t("v1.infrastructure.image")}</TableCell>
-							<TableCell>{t("v1.infrastructure.status")}</TableCell>
-							<TableCell>{t("v1.infrastructure.health")}</TableCell>
-							<TableCell>{t("v1.infrastructure.ports")}</TableCell>
-							<TableCell>{t("v1.infrastructure.started")}</TableCell>
+							<TableCell
+								sx={{
+									color: theme.palette.primary.contrastTextSecondary,
+									borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+								}}
+							>
+								{t("v1.infrastructure.containerName")}
+							</TableCell>
+							<TableCell
+								sx={{
+									color: theme.palette.primary.contrastTextSecondary,
+									borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+								}}
+							>
+								{t("v1.infrastructure.image")}
+							</TableCell>
+							<TableCell
+								sx={{
+									color: theme.palette.primary.contrastTextSecondary,
+									borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+								}}
+							>
+								{t("v1.infrastructure.status")}
+							</TableCell>
+							<TableCell
+								sx={{
+									color: theme.palette.primary.contrastTextSecondary,
+									borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+								}}
+							>
+								{t("v1.infrastructure.health")}
+							</TableCell>
+							<TableCell
+								sx={{
+									color: theme.palette.primary.contrastTextSecondary,
+									borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+								}}
+							>
+								{t("v1.infrastructure.ports")}
+							</TableCell>
+							<TableCell
+								sx={{
+									color: theme.palette.primary.contrastTextSecondary,
+									borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+								}}
+							>
+								{t("v1.infrastructure.started")}
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{containers.map((container) => (
 							<TableRow key={container.container_id}>
-								<TableCell>
+								<TableCell
+									sx={{
+										color: theme.palette.primary.contrastText,
+										borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+									}}
+								>
 									<Typography
 										variant="body2"
 										fontWeight="medium"
+										sx={{ color: theme.palette.primary.contrastText }}
 									>
 										{container.container_name || "Unknown"}
 									</Typography>
 									<Typography
 										variant="caption"
-										color="text.secondary"
+										sx={{ color: theme.palette.primary.contrastTextTertiary }}
 									>
 										{container.container_id?.substring(0, 12)}
 									</Typography>
 								</TableCell>
 
-								<TableCell>
+								<TableCell
+									sx={{
+										color: theme.palette.primary.contrastText,
+										borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+									}}
+								>
 									<Typography
 										variant="body2"
 										noWrap
+										sx={{ color: theme.palette.primary.contrastText }}
 									>
 										{container.base_image}
 									</Typography>
 								</TableCell>
 
-								<TableCell>
+								<TableCell
+									sx={{
+										color: theme.palette.primary.contrastText,
+										borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+									}}
+								>
 									<Chip
 										label={container.status || "unknown"}
 										color={getStatusColor(container.status)}
@@ -185,7 +212,12 @@ const DockerTab = ({ monitorId }) => {
 									/>
 								</TableCell>
 
-								<TableCell>
+								<TableCell
+									sx={{
+										color: theme.palette.primary.contrastText,
+										borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+									}}
+								>
 									{container.health ? (
 										<Box>
 											<Chip
@@ -196,7 +228,7 @@ const DockerTab = ({ monitorId }) => {
 											<Typography
 												variant="caption"
 												display="block"
-												color="text.secondary"
+												sx={{ color: theme.palette.primary.contrastTextTertiary }}
 												mt={0.5}
 											>
 												{container.health.source}
@@ -205,20 +237,26 @@ const DockerTab = ({ monitorId }) => {
 									) : (
 										<Typography
 											variant="caption"
-											color="text.secondary"
+											sx={{ color: theme.palette.primary.contrastTextTertiary }}
 										>
 											N/A
 										</Typography>
 									)}
 								</TableCell>
 
-								<TableCell>
+								<TableCell
+									sx={{
+										color: theme.palette.primary.contrastText,
+										borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+									}}
+								>
 									{container.exposed_ports && container.exposed_ports.length > 0 ? (
 										container.exposed_ports.map((port, idx) => (
 											<Typography
 												key={idx}
 												variant="caption"
 												display="block"
+												sx={{ color: theme.palette.primary.contrastText }}
 											>
 												{port.port}/{port.protocol}
 											</Typography>
@@ -226,22 +264,32 @@ const DockerTab = ({ monitorId }) => {
 									) : (
 										<Typography
 											variant="caption"
-											color="text.secondary"
+											sx={{ color: theme.palette.primary.contrastTextTertiary }}
 										>
 											{t("v1.infrastructure.noPorts")}
 										</Typography>
 									)}
 								</TableCell>
 
-								<TableCell>
-									<Typography variant="body2">{formatTimestamp(container.started_at)}</Typography>
+								<TableCell
+									sx={{
+										color: theme.palette.primary.contrastText,
+										borderBottom: `1px solid ${theme.palette.primary.lowContrast}`,
+									}}
+								>
+									<Typography
+										variant="body2"
+										sx={{ color: theme.palette.primary.contrastText }}
+									>
+										{formatTimestamp(container.started_at)}
+									</Typography>
 								</TableCell>
 							</TableRow>
 						))}
 					</TableBody>
 				</Table>
 			</TableContainer>
-		</Stack>
+		</>
 	);
 };
 
