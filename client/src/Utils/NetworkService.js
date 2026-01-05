@@ -202,6 +202,16 @@ class NetworkService {
 			`/monitors/hardware/details/${config.monitorId}?${params.toString()}`
 		);
 	}
+
+	async getDockerDataById(config) {
+		const params = new URLSearchParams();
+		if (config.limit) params.append("limit", config.limit);
+
+		return this.axiosInstance.get(
+			`/monitors/hardware/docker/${config.monitorId}?${params.toString()}`
+		);
+	}
+
 	async getUptimeDetailsById(config) {
 		const params = new URLSearchParams();
 		if (config.dateRange) params.append("dateRange", config.dateRange);

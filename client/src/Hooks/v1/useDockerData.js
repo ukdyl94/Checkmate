@@ -16,8 +16,8 @@ const useDockerData = ({ monitorId }) => {
 				setIsLoading(true);
 				setError(null);
 
-				const response = await networkService.get({
-					endpoint: `/monitors/hardware/docker/${monitorId}`,
+				const response = await networkService.getDockerDataById({
+					monitorId,
 				});
 
 				if (isMounted) {
