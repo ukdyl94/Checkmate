@@ -219,21 +219,11 @@ const DockerTab = ({ monitorId }) => {
 									}}
 								>
 									{container.health ? (
-										<Box>
-											<Chip
-												label={container.health.healthy ? "Healthy" : "Unhealthy"}
-												color={container.health.healthy ? "success" : "error"}
-												size="small"
-											/>
-											<Typography
-												variant="caption"
-												display="block"
-												sx={{ color: theme.palette.primary.contrastTextTertiary }}
-												mt={0.5}
-											>
-												{container.health.source}
-											</Typography>
-										</Box>
+										<Chip
+											label={container.health.healthy ? "Healthy" : "Unhealthy"}
+											color={container.health.healthy ? "success" : "error"}
+											size="small"
+										/>
 									) : (
 										<Typography
 											variant="caption"

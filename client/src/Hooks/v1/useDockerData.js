@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { networkService } from "../../main.jsx";
 
 const useDockerData = ({ monitorId }) => {
 	const [dockerData, setDockerData] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const isInitialLoad = useRef(true);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -13,7 +14,10 @@ const useDockerData = ({ monitorId }) => {
 			if (!monitorId) return;
 
 			try {
-				setIsLoading(true);
+				// Only show loading spinner on initial load, not on polling updates
+				if (isInitialLoad.current) {
+					setIsLoading(true);
+				}
 				setError(null);
 
 				const response = await networkService.getDockerDataById({
@@ -34,8 +38,9 @@ const useDockerData = ({ monitorId }) => {
 					setDockerData(null);
 				}
 			} finally {
-				if (isMounted) {
+				if (isMounted && isInitialLoad.current) {
 					setIsLoading(false);
+					isInitialLoad.current = false;
 				}
 			}
 		};
