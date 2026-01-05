@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
 import {
 	Box,
 	Card,
@@ -17,38 +16,12 @@ import {
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useTranslation } from "react-i18next";
-import { networkService } from "../../../../../../main.jsx";
+import useDockerData from "../../../../../../Hooks/v1/useDockerData.js";
 
 const DockerTab = ({ monitorId }) => {
-	const [dockerData, setDockerData] = useState(null);
-	const [loading, setLoading] = useState(true);
 	const theme = useTheme();
 	const { t } = useTranslation();
-
-	useEffect(() => {
-		fetchDockerData();
-		// Poll every 15 seconds for updates
-		const interval = setInterval(fetchDockerData, 15000);
-		return () => clearInterval(interval);
-	}, [monitorId]);
-
-	const fetchDockerData = async () => {
-		try {
-			const response = await networkService.get({
-				endpoint: `/monitors/hardware/docker/${monitorId}`,
-			});
-			if (response.data.success && response.data.data.length > 0) {
-				setDockerData(response.data.data[0].docker);
-			} else {
-				setDockerData(null);
-			}
-		} catch (error) {
-			console.error("Error fetching Docker data:", error);
-			setDockerData(null);
-		} finally {
-			setLoading(false);
-		}
-	};
+	const { dockerData, isLoading: loading } = useDockerData({ monitorId });
 
 	const getStatusColor = (status) => {
 		switch (status?.toLowerCase()) {
